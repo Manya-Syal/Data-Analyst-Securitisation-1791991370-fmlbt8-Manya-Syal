@@ -1,0 +1,668 @@
+// DAX Studio benchmark - run with Server Timings ON; target < 100 ms per measure (brief Day 12).
+// One EVALUATE per measure. Paste into DAX Studio connected to the open .pbix, or use 'Run Benchmark'.
+
+// D03-01
+EVALUATE ROW ( "Measure", "Total Outstanding Balance", "Value", [Total Outstanding Balance] )
+
+// D03-02
+EVALUATE ROW ( "Measure", "Original Balance", "Value", [Original Balance] )
+
+// D03-03
+EVALUATE ROW ( "Measure", "Pool Factor", "Value", [Pool Factor] )
+
+// D03-04
+EVALUATE ROW ( "Measure", "Total EAD", "Value", [Total EAD] )
+
+// D03-05
+EVALUATE ROW ( "Measure", "Loan Count", "Value", [Loan Count] )
+
+// D03-06
+EVALUATE ROW ( "Measure", "Active Loans", "Value", [Active Loans] )
+
+// D03-07
+EVALUATE ROW ( "Measure", "Defaulted Loans", "Value", [Defaulted Loans] )
+
+// D03-08
+EVALUATE ROW ( "Measure", "Prepaid Loans", "Value", [Prepaid Loans] )
+
+// D03-09
+EVALUATE ROW ( "Measure", "Defaulted Balance", "Value", [Defaulted Balance] )
+
+// D03-10
+EVALUATE ROW ( "Measure", "Balance Current", "Value", [Balance Current] )
+
+// D03-11
+EVALUATE ROW ( "Measure", "Balance 1-29 DPD", "Value", [Balance 1-29 DPD] )
+
+// D03-12
+EVALUATE ROW ( "Measure", "Balance 30 DPD", "Value", [Balance 30 DPD] )
+
+// D03-13
+EVALUATE ROW ( "Measure", "Balance 60 DPD", "Value", [Balance 60 DPD] )
+
+// D03-14
+EVALUATE ROW ( "Measure", "Balance 90 DPD", "Value", [Balance 90 DPD] )
+
+// D03-15
+EVALUATE ROW ( "Measure", "Balance 120+ DPD", "Value", [Balance 120+ DPD] )
+
+// D03-16
+EVALUATE ROW ( "Measure", "Delinquent 30+ Balance", "Value", [Delinquent 30+ Balance] )
+
+// D03-17
+EVALUATE ROW ( "Measure", "Delinquent 30+ %", "Value", [Delinquent 30+ %] )
+
+// D03-18
+EVALUATE ROW ( "Measure", "Delinquent 60+ Balance", "Value", [Delinquent 60+ Balance] )
+
+// D03-19
+EVALUATE ROW ( "Measure", "Delinquent 60+ %", "Value", [Delinquent 60+ %] )
+
+// D03-20
+EVALUATE ROW ( "Measure", "Delinquent 90+ Balance", "Value", [Delinquent 90+ Balance] )
+
+// D03-21
+EVALUATE ROW ( "Measure", "Delinquent 90+ %", "Value", [Delinquent 90+ %] )
+
+// D03-22
+EVALUATE ROW ( "Measure", "WAC", "Value", [WAC] )
+
+// D03-23
+EVALUATE ROW ( "Measure", "WAM", "Value", [WAM] )
+
+// D03-24
+EVALUATE ROW ( "Measure", "WALA", "Value", [WALA] )
+
+// D03-25
+EVALUATE ROW ( "Measure", "WALT", "Value", [WALT] )
+
+// D03-26
+EVALUATE ROW ( "Measure", "WA LTV Origination", "Value", [WA LTV Origination] )
+
+// D03-27
+EVALUATE ROW ( "Measure", "WA LTV Current", "Value", [WA LTV Current] )
+
+// D03-28
+EVALUATE ROW ( "Measure", "WA CIBIL", "Value", [WA CIBIL] )
+
+// D03-29
+EVALUATE ROW ( "Measure", "WA CIBIL Origination", "Value", [WA CIBIL Origination] )
+
+// D03-30
+EVALUATE ROW ( "Measure", "WA DTI", "Value", [WA DTI] )
+
+// D03-31
+EVALUATE ROW ( "Measure", "Average Loan Balance", "Value", [Average Loan Balance] )
+
+// D03-32
+EVALUATE ROW ( "Measure", "Largest Loan Balance", "Value", [Largest Loan Balance] )
+
+// D03-33
+EVALUATE ROW ( "Measure", "Insured Loan %", "Value", [Insured Loan %] )
+
+// D03-34
+EVALUATE ROW ( "Measure", "New Vehicle %", "Value", [New Vehicle %] )
+
+// D03-35
+EVALUATE ROW ( "Measure", "Modified Loan %", "Value", [Modified Loan %] )
+
+// D03-36
+EVALUATE ROW ( "Measure", "Total Prepayments", "Value", [Total Prepayments] )
+
+// D03-37
+EVALUATE ROW ( "Measure", "Total Loss Amount", "Value", [Total Loss Amount] )
+
+// D03-38
+EVALUATE ROW ( "Measure", "Total Recoveries", "Value", [Total Recoveries] )
+
+// D03-39
+EVALUATE ROW ( "Measure", "Total Net Loss (Tape)", "Value", [Total Net Loss (Tape)] )
+
+// D03-40
+EVALUATE ROW ( "Measure", "Payment Collection Rate", "Value", [Payment Collection Rate] )
+
+// D04-01
+EVALUATE ROW ( "Measure", "Net Loss (Monthly)", "Value", [Net Loss (Monthly)] )
+
+// D04-02
+EVALUATE ROW ( "Measure", "Gross Loss (Monthly)", "Value", [Gross Loss (Monthly)] )
+
+// D04-03
+EVALUATE ROW ( "Measure", "Recoveries (Monthly)", "Value", [Recoveries (Monthly)] )
+
+// D04-04
+EVALUATE ROW ( "Measure", "New Defaults Balance (Monthly)", "Value", [New Defaults Balance (Monthly)] )
+
+// D04-05
+EVALUATE ROW ( "Measure", "BOP Balance (Monthly)", "Value", [BOP Balance (Monthly)] )
+
+// D04-06
+EVALUATE ROW ( "Measure", "Monthly Default Rate", "Value", [Monthly Default Rate] )
+
+// D04-07
+EVALUATE ROW ( "Measure", "Monthly Net Loss Rate", "Value", [Monthly Net Loss Rate] )
+
+// D04-08
+EVALUATE ROW ( "Measure", "Net Loss MTD", "Value", [Net Loss MTD] )
+
+// D04-09
+EVALUATE ROW ( "Measure", "Net Loss QTD", "Value", [Net Loss QTD] )
+
+// D04-10
+EVALUATE ROW ( "Measure", "Net Loss YTD", "Value", [Net Loss YTD] )
+
+// D04-11
+EVALUATE ROW ( "Measure", "Net Loss FYTD", "Value", [Net Loss FYTD] )
+
+// D04-12
+EVALUATE ROW ( "Measure", "Net Loss Prior Month", "Value", [Net Loss Prior Month] )
+
+// D04-13
+EVALUATE ROW ( "Measure", "Net Loss MoM %", "Value", [Net Loss MoM %] )
+
+// D04-14
+EVALUATE ROW ( "Measure", "Default Rate Prior Quarter", "Value", [Default Rate Prior Quarter] )
+
+// D04-15
+EVALUATE ROW ( "Measure", "Default Rate QoQ Change", "Value", [Default Rate QoQ Change] )
+
+// D04-16
+EVALUATE ROW ( "Measure", "Default Rate vs Prior Year", "Value", [Default Rate vs Prior Year] )
+
+// D04-17
+EVALUATE ROW ( "Measure", "Rolling 3M Default Rate", "Value", [Rolling 3M Default Rate] )
+
+// D04-18
+EVALUATE ROW ( "Measure", "Rolling 12M Default Rate", "Value", [Rolling 12M Default Rate] )
+
+// D04-19
+EVALUATE ROW ( "Measure", "Rolling 3M Net Loss Rate", "Value", [Rolling 3M Net Loss Rate] )
+
+// D04-20
+EVALUATE ROW ( "Measure", "Default Rate 12M Average", "Value", [Default Rate 12M Average] )
+
+// D04-21
+EVALUATE ROW ( "Measure", "Default Rate 12M StdDev", "Value", [Default Rate 12M StdDev] )
+
+// D04-22
+EVALUATE ROW ( "Measure", "Default Rate Z-Score", "Value", [Default Rate Z-Score] )
+
+// D04-23
+EVALUATE ROW ( "Measure", "Default Rate Trend Alert", "Value", [Default Rate Trend Alert] )
+
+// D04-24
+EVALUATE ROW ( "Measure", "Delinquency 30+ Z-Score", "Value", [Delinquency 30+ Z-Score] )
+
+// D05-01
+EVALUATE ROW ( "Measure", "Pool Share %", "Value", [Pool Share %] )
+
+// D05-02
+EVALUATE ROW ( "Measure", "LTV > 90% Share", "Value", [LTV > 90% Share] )
+
+// D05-03
+EVALUATE ROW ( "Measure", "CIBIL < 650 Share", "Value", [CIBIL < 650 Share] )
+
+// D05-04
+EVALUATE ROW ( "Measure", "Top 3 States", "Value", [Top 3 States] )
+
+// D05-05
+EVALUATE ROW ( "Measure", "Top 5 State Concentration", "Value", [Top 5 State Concentration] )
+
+// D05-06
+EVALUATE ROW ( "Measure", "Top 10 Loan Concentration", "Value", [Top 10 Loan Concentration] )
+
+// D05-07
+EVALUATE ROW ( "Measure", "Top 10 Borrower Concentration", "Value", [Top 10 Borrower Concentration] )
+
+// D05-08
+EVALUATE ROW ( "Measure", "HHI State", "Value", [HHI State] )
+
+// D05-09
+EVALUATE ROW ( "Measure", "HHI Servicer", "Value", [HHI Servicer] )
+
+// D05-10
+EVALUATE ROW ( "Measure", "HHI Vehicle Make", "Value", [HHI Vehicle Make] )
+
+// D05-11
+EVALUATE ROW ( "Measure", "HHI Borrower", "Value", [HHI Borrower] )
+
+// D05-12
+EVALUATE ROW ( "Measure", "State Rank", "Value", [State Rank] )
+
+// D05-13
+EVALUATE ROW ( "Measure", "Distinct States", "Value", [Distinct States] )
+
+// D05-14
+EVALUATE ROW ( "Measure", "Portfolio ECL (Context Transition)", "Value", [Portfolio ECL (Context Transition)] )
+
+// D06-01
+EVALUATE ROW ( "Measure", "Ending Pool Balance", "Value", [Ending Pool Balance] )
+
+// D06-02
+EVALUATE ROW ( "Measure", "Interest Collected", "Value", [Interest Collected] )
+
+// D06-03
+EVALUATE ROW ( "Measure", "Servicing Fees", "Value", [Servicing Fees] )
+
+// D06-04
+EVALUATE ROW ( "Measure", "Net Loss (Projected)", "Value", [Net Loss (Projected)] )
+
+// D06-05
+EVALUATE ROW ( "Measure", "Excess Spread", "Value", [Excess Spread] )
+
+// D06-06
+EVALUATE ROW ( "Measure", "Excess Spread % (annualised)", "Value", [Excess Spread % (annualised)] )
+
+// D06-07
+EVALUATE ROW ( "Measure", "Cumulative Loss % (Projected)", "Value", [Cumulative Loss % (Projected)] )
+
+// D06-08
+EVALUATE ROW ( "Measure", "OC Ratio", "Value", [OC Ratio] )
+
+// D06-09
+EVALUATE ROW ( "Measure", "Tranche Beginning Balance", "Value", [Tranche Beginning Balance] )
+
+// D06-10
+EVALUATE ROW ( "Measure", "Tranche Ending Balance", "Value", [Tranche Ending Balance] )
+
+// D06-11
+EVALUATE ROW ( "Measure", "Interest Due", "Value", [Interest Due] )
+
+// D06-12
+EVALUATE ROW ( "Measure", "Interest Paid", "Value", [Interest Paid] )
+
+// D06-13
+EVALUATE ROW ( "Measure", "Interest Shortfall", "Value", [Interest Shortfall] )
+
+// D06-14
+EVALUATE ROW ( "Measure", "Principal Paid", "Value", [Principal Paid] )
+
+// D06-15
+EVALUATE ROW ( "Measure", "Tranche Writedown", "Value", [Tranche Writedown] )
+
+// D06-16
+EVALUATE ROW ( "Measure", "Writedown % of Tranche", "Value", [Writedown % of Tranche] )
+
+// D06-17
+EVALUATE ROW ( "Measure", "Credit Enhancement %", "Value", [Credit Enhancement %] )
+
+// D06-18
+EVALUATE ROW ( "Measure", "Tranche Loss % (Attach-Detach)", "Value", [Tranche Loss % (Attach-Detach)] )
+
+// D06-19
+EVALUATE ROW ( "Measure", "Principal Available", "Value", [Principal Available] )
+
+// D06-20
+EVALUATE ROW ( "Measure", "Principal to Class A", "Value", [Principal to Class A] )
+
+// D06-21
+EVALUATE ROW ( "Measure", "Principal to Class B", "Value", [Principal to Class B] )
+
+// D06-22
+EVALUATE ROW ( "Measure", "Tranche Status", "Value", [Tranche Status] )
+
+// D06-23
+EVALUATE ROW ( "Measure", "Delinq Trigger Value", "Value", [Delinq Trigger Value] )
+
+// D06-24
+EVALUATE ROW ( "Measure", "CNL Trigger Value", "Value", [CNL Trigger Value] )
+
+// D06-25
+EVALUATE ROW ( "Measure", "OC Trigger Value", "Value", [OC Trigger Value] )
+
+// D06-26
+EVALUATE ROW ( "Measure", "Delinquency Trigger Status", "Value", [Delinquency Trigger Status] )
+
+// D06-27
+EVALUATE ROW ( "Measure", "Delinquency Trigger Headroom", "Value", [Delinquency Trigger Headroom] )
+
+// D06-28
+EVALUATE ROW ( "Measure", "CNL Trigger Status", "Value", [CNL Trigger Status] )
+
+// D06-29
+EVALUATE ROW ( "Measure", "OC Trigger Status", "Value", [OC Trigger Status] )
+
+// D06-30
+EVALUATE ROW ( "Measure", "Trigger Breach Count", "Value", [Trigger Breach Count] )
+
+// D06-31
+EVALUATE ROW ( "Measure", "CNL Trigger Breach Month", "Value", [CNL Trigger Breach Month] )
+
+// D07-01
+EVALUATE ROW ( "Measure", "Snapshot Loans", "Value", [Snapshot Loans] )
+
+// D07-02
+EVALUATE ROW ( "Measure", "Snapshot Balance", "Value", [Snapshot Balance] )
+
+// D07-03
+EVALUATE ROW ( "Measure", "DPD 30+ Balance (Snapshot)", "Value", [DPD 30+ Balance (Snapshot)] )
+
+// D07-04
+EVALUATE ROW ( "Measure", "DPD 30+ %", "Value", [DPD 30+ %] )
+
+// D07-05
+EVALUATE ROW ( "Measure", "DPD 60+ %", "Value", [DPD 60+ %] )
+
+// D07-06
+EVALUATE ROW ( "Measure", "DPD 90+ %", "Value", [DPD 90+ %] )
+
+// D07-07
+EVALUATE ROW ( "Measure", "Bucket Balance %", "Value", [Bucket Balance %] )
+
+// D07-08
+EVALUATE ROW ( "Measure", "DPD 30+ % (Date View)", "Value", [DPD 30+ % (Date View)] )
+
+// D07-09
+EVALUATE ROW ( "Measure", "Transition Count", "Value", [Transition Count] )
+
+// D07-10
+EVALUATE ROW ( "Measure", "Roll Rate %", "Value", [Roll Rate %] )
+
+// D07-11
+EVALUATE ROW ( "Measure", "Worsened Transitions", "Value", [Worsened Transitions] )
+
+// D07-12
+EVALUATE ROW ( "Measure", "Cured Transitions", "Value", [Cured Transitions] )
+
+// D07-13
+EVALUATE ROW ( "Measure", "Roll Forward Rate", "Value", [Roll Forward Rate] )
+
+// D07-14
+EVALUATE ROW ( "Measure", "Cure Rate", "Value", [Cure Rate] )
+
+// D07-15
+EVALUATE ROW ( "Measure", "Cure Rate (30+ DPD)", "Value", [Cure Rate (30+ DPD)] )
+
+// D07-16
+EVALUATE ROW ( "Measure", "Roll Rate Current to Current", "Value", [Roll Rate Current to Current] )
+
+// D07-17
+EVALUATE ROW ( "Measure", "Roll Rate Current to 1-29", "Value", [Roll Rate Current to 1-29] )
+
+// D07-18
+EVALUATE ROW ( "Measure", "Roll Rate 30-59 to 60-89", "Value", [Roll Rate 30-59 to 60-89] )
+
+// D07-19
+EVALUATE ROW ( "Measure", "Roll Rate 60-89 to 90+", "Value", [Roll Rate 60-89 to 90+] )
+
+// D07-20
+EVALUATE ROW ( "Measure", "Balance Delinquent 1-2 Months", "Value", [Balance Delinquent 1-2 Months] )
+
+// D07-21
+EVALUATE ROW ( "Measure", "Balance Delinquent 3-5 Months", "Value", [Balance Delinquent 3-5 Months] )
+
+// D07-22
+EVALUATE ROW ( "Measure", "Balance Delinquent 6+ Months", "Value", [Balance Delinquent 6+ Months] )
+
+// D07-23
+EVALUATE ROW ( "Measure", "Avg Months Delinquent", "Value", [Avg Months Delinquent] )
+
+// D07-24
+EVALUATE ROW ( "Measure", "Loans Delinquent 3+ Months (Latest)", "Value", [Loans Delinquent 3+ Months (Latest)] )
+
+// D08-01
+EVALUATE ROW ( "Measure", "Vintage Original Balance", "Value", [Vintage Original Balance] )
+
+// D08-02
+EVALUATE ROW ( "Measure", "CNL Rate @ MOB", "Value", [CNL Rate @ MOB] )
+
+// D08-03
+EVALUATE ROW ( "Measure", "Cumulative Default Rate @ MOB", "Value", [Cumulative Default Rate @ MOB] )
+
+// D08-04
+EVALUATE ROW ( "Measure", "Cumulative Gross Loss Rate @ MOB", "Value", [Cumulative Gross Loss Rate @ MOB] )
+
+// D08-05
+EVALUATE ROW ( "Measure", "Cumulative Prepayment Rate @ MOB", "Value", [Cumulative Prepayment Rate @ MOB] )
+
+// D08-06
+EVALUATE ROW ( "Measure", "Pool Factor @ MOB", "Value", [Pool Factor @ MOB] )
+
+// D08-07
+EVALUATE ROW ( "Measure", "Latest MOB", "Value", [Latest MOB] )
+
+// D08-08
+EVALUATE ROW ( "Measure", "CNL Rate (Latest MOB)", "Value", [CNL Rate (Latest MOB)] )
+
+// D08-09
+EVALUATE ROW ( "Measure", "Loss Timing % (of CNL to date)", "Value", [Loss Timing % (of CNL to date)] )
+
+// D08-10
+EVALUATE ROW ( "Measure", "Marginal Loss Rate (Wtd)", "Value", [Marginal Loss Rate (Wtd)] )
+
+// D08-11
+EVALUATE ROW ( "Measure", "Vintage 30+ Delinquency (Wtd)", "Value", [Vintage 30+ Delinquency (Wtd)] )
+
+// D08-12
+EVALUATE ROW ( "Measure", "Projected Ultimate CNL (MOB 36)", "Value", [Projected Ultimate CNL (MOB 36)] )
+
+// D08-13
+EVALUATE ROW ( "Measure", "Vintage WAC", "Value", [Vintage WAC] )
+
+// D08-14
+EVALUATE ROW ( "Measure", "Vintage WALA", "Value", [Vintage WALA] )
+
+// D09-01
+EVALUATE ROW ( "Measure", "Total ECL (Tape)", "Value", [Total ECL (Tape)] )
+
+// D09-02
+EVALUATE ROW ( "Measure", "ECL Coverage %", "Value", [ECL Coverage %] )
+
+// D09-03
+EVALUATE ROW ( "Measure", "ECL Stage 1", "Value", [ECL Stage 1] )
+
+// D09-04
+EVALUATE ROW ( "Measure", "ECL Stage 2", "Value", [ECL Stage 2] )
+
+// D09-05
+EVALUATE ROW ( "Measure", "ECL Stage 3", "Value", [ECL Stage 3] )
+
+// D09-06
+EVALUATE ROW ( "Measure", "EAD Stage 1", "Value", [EAD Stage 1] )
+
+// D09-07
+EVALUATE ROW ( "Measure", "EAD Stage 2", "Value", [EAD Stage 2] )
+
+// D09-08
+EVALUATE ROW ( "Measure", "EAD Stage 3", "Value", [EAD Stage 3] )
+
+// D09-09
+EVALUATE ROW ( "Measure", "Stage Mix % (EAD)", "Value", [Stage Mix % (EAD)] )
+
+// D09-10
+EVALUATE ROW ( "Measure", "Avg PD (EAD-weighted)", "Value", [Avg PD (EAD-weighted)] )
+
+// D09-11
+EVALUATE ROW ( "Measure", "Avg LGD (EAD-weighted)", "Value", [Avg LGD (EAD-weighted)] )
+
+// D09-12
+EVALUATE ROW ( "Measure", "ECL Recomputed (PD x LGD x EAD)", "Value", [ECL Recomputed (PD x LGD x EAD)] )
+
+// D09-13
+EVALUATE ROW ( "Measure", "ECL Recompute Variance", "Value", [ECL Recompute Variance] )
+
+// D09-14
+EVALUATE ROW ( "Measure", "Realised Recovery Rate (Tape)", "Value", [Realised Recovery Rate (Tape)] )
+
+// D09-15
+EVALUATE ROW ( "Measure", "Net Loss Severity (Dynamic)", "Value", [Net Loss Severity (Dynamic)] )
+
+// D09-16
+EVALUATE ROW ( "Measure", "Gross Loss Severity (Dynamic)", "Value", [Gross Loss Severity (Dynamic)] )
+
+// D09-17
+EVALUATE ROW ( "Measure", "PD Term Structure", "Value", [PD Term Structure] )
+
+// D09-18
+EVALUATE ROW ( "Measure", "12M PD from Transition Matrix", "Value", [12M PD from Transition Matrix] )
+
+// D09-19
+EVALUATE ROW ( "Measure", "Param Pool LGD", "Value", [Param Pool LGD] )
+
+// D09-20
+EVALUATE ROW ( "Measure", "Param Base CPR", "Value", [Param Base CPR] )
+
+// D09-21
+EVALUATE ROW ( "Measure", "Param Rate Elasticity", "Value", [Param Rate Elasticity] )
+
+// D09-22
+EVALUATE ROW ( "Measure", "Challenger ECL (DAX)", "Value", [Challenger ECL (DAX)] )
+
+// D09-23
+EVALUATE ROW ( "Measure", "Challenger vs Tape Variance %", "Value", [Challenger vs Tape Variance %] )
+
+// D09-24
+EVALUATE ROW ( "Measure", "Stage 2 DPD Value", "Value", [Stage 2 DPD Value] )
+
+// D09-25
+EVALUATE ROW ( "Measure", "Stage 3 DPD Value", "Value", [Stage 3 DPD Value] )
+
+// D09-26
+EVALUATE ROW ( "Measure", "ECL (Alt Staging)", "Value", [ECL (Alt Staging)] )
+
+// D10-01
+EVALUATE ROW ( "Measure", "Default Rate Multiplier Value", "Value", [Default Rate Multiplier Value] )
+
+// D10-02
+EVALUATE ROW ( "Measure", "Recovery Haircut Value", "Value", [Recovery Haircut Value] )
+
+// D10-03
+EVALUATE ROW ( "Measure", "CPR Change Value", "Value", [CPR Change Value] )
+
+// D10-04
+EVALUATE ROW ( "Measure", "Rate Shock Value", "Value", [Rate Shock Value] )
+
+// D10-05
+EVALUATE ROW ( "Measure", "Effective PD Multiplier", "Value", [Effective PD Multiplier] )
+
+// D10-06
+EVALUATE ROW ( "Measure", "Stress ECL (What-If)", "Value", [Stress ECL (What-If)] )
+
+// D10-07
+EVALUATE ROW ( "Measure", "Stress ECL Uplift", "Value", [Stress ECL Uplift] )
+
+// D10-08
+EVALUATE ROW ( "Measure", "Stress ECL Uplift %", "Value", [Stress ECL Uplift %] )
+
+// D10-09
+EVALUATE ROW ( "Measure", "Stress Coverage %", "Value", [Stress Coverage %] )
+
+// D10-10
+EVALUATE ROW ( "Measure", "Scenario ECL", "Value", [Scenario ECL] )
+
+// D10-11
+EVALUATE ROW ( "Measure", "Probability-Weighted Scenario ECL", "Value", [Probability-Weighted Scenario ECL] )
+
+// D10-12
+EVALUATE ROW ( "Measure", "Weighted ECL vs Tape", "Value", [Weighted ECL vs Tape] )
+
+// D10-13
+EVALUATE ROW ( "Measure", "Cum Loss % at Horizon", "Value", [Cum Loss % at Horizon] )
+
+// D10-14
+EVALUATE ROW ( "Measure", "Senior Tranche Loss", "Value", [Senior Tranche Loss] )
+
+// D10-15
+EVALUATE ROW ( "Measure", "Mezzanine Tranche Loss", "Value", [Mezzanine Tranche Loss] )
+
+// D10-16
+EVALUATE ROW ( "Measure", "Junior Tranche Loss %", "Value", [Junior Tranche Loss %] )
+
+// D10-17
+EVALUATE ROW ( "Measure", "Equity Loss %", "Value", [Equity Loss %] )
+
+// D10-18
+EVALUATE ROW ( "Measure", "Minimum OC Ratio", "Value", [Minimum OC Ratio] )
+
+// D10-19
+EVALUATE ROW ( "Measure", "CNL Trigger Headroom", "Value", [CNL Trigger Headroom] )
+
+// D10-20
+EVALUATE ROW ( "Measure", "OC Trigger Headroom", "Value", [OC Trigger Headroom] )
+
+// D10-21
+EVALUATE ROW ( "Measure", "Arena W Equity", "Value", [Arena W Equity] )
+
+// D10-22
+EVALUATE ROW ( "Measure", "Arena W Junior", "Value", [Arena W Junior] )
+
+// D10-23
+EVALUATE ROW ( "Measure", "Arena W Mezzanine", "Value", [Arena W Mezzanine] )
+
+// D10-24
+EVALUATE ROW ( "Measure", "Arena W Senior", "Value", [Arena W Senior] )
+
+// D10-25
+EVALUATE ROW ( "Measure", "Arena W Trigger breach", "Value", [Arena W Trigger breach] )
+
+// D10-26
+EVALUATE ROW ( "Measure", "Arena Min Fortress", "Value", [Arena Min Fortress] )
+
+// D10-27
+EVALUATE ROW ( "Measure", "Arena Min Resilient", "Value", [Arena Min Resilient] )
+
+// D10-28
+EVALUATE ROW ( "Measure", "Arena Min Stressed", "Value", [Arena Min Stressed] )
+
+// D10-29
+EVALUATE ROW ( "Measure", "Mezzanine Loss %", "Value", [Mezzanine Loss %] )
+
+// D10-30
+EVALUATE ROW ( "Measure", "Senior Loss %", "Value", [Senior Loss %] )
+
+// D10-31
+EVALUATE ROW ( "Measure", "Arena Score", "Value", [Arena Score] )
+
+// D10-32
+EVALUATE ROW ( "Measure", "Arena Rating", "Value", [Arena Rating] )
+
+// D10-33
+EVALUATE ROW ( "Measure", "Arena Message", "Value", [Arena Message] )
+
+// D11-01
+EVALUATE ROW ( "Measure", "Cumulative Net Loss (Reporting)", "Value", [Cumulative Net Loss (Reporting)] )
+
+// D11-02
+EVALUATE ROW ( "Measure", "Cumulative Net Loss % of Original", "Value", [Cumulative Net Loss % of Original] )
+
+// D11-03
+EVALUATE ROW ( "Measure", "Annualised Default Rate (All Months)", "Value", [Annualised Default Rate (All Months)] )
+
+// D11-04
+EVALUATE ROW ( "Measure", "SMM", "Value", [SMM] )
+
+// D11-05
+EVALUATE ROW ( "Measure", "CPR (Annualised)", "Value", [CPR (Annualised)] )
+
+// D11-06
+EVALUATE ROW ( "Measure", "Collection Efficiency", "Value", [Collection Efficiency] )
+
+// D11-07
+EVALUATE ROW ( "Measure", "Excess Spread (Reported)", "Value", [Excess Spread (Reported)] )
+
+// D11-08
+EVALUATE ROW ( "Measure", "Excess Spread % (Reported, annualised)", "Value", [Excess Spread % (Reported, annualised)] )
+
+// D11-09
+EVALUATE ROW ( "Measure", "Report Month Label", "Value", [Report Month Label] )
+
+// D11-10
+EVALUATE ROW ( "Measure", "Data Tape Field Completeness %", "Value", [Data Tape Field Completeness %] )
+
+// D12-01
+EVALUATE ROW ( "Measure", "Current User", "Value", [Current User] )
+
+// D12-02
+EVALUATE ROW ( "Measure", "Current User Role", "Value", [Current User Role] )
+
+// D12-03
+EVALUATE ROW ( "Measure", "Loans Visible to User", "Value", [Loans Visible to User] )
+
+// D12-04
+EVALUATE ROW ( "Measure", "Reconciliation Break (Tape vs Dynamic)", "Value", [Reconciliation Break (Tape vs Dynamic)] )
+
+// D12-05
+EVALUATE ROW ( "Measure", "High-Severity Data Issues", "Value", [High-Severity Data Issues] )
+
+// D12-06
+EVALUATE ROW ( "Measure", "ECL Check Flag", "Value", [ECL Check Flag] )

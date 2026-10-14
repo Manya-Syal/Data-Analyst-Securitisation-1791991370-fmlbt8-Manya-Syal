@@ -1,0 +1,9 @@
+DPD_Bucket,BucketOrder,IsDelinquent30Plus,IsNPA90Plus,RBI_SMA_Class
+Current,0,0,0,Standard
+1-29 DPD,1,0,0,SMA-0
+30-59 DPD,2,1,0,SMA-1
+60-89 DPD,3,1,0,SMA-2
+90-119 DPD,4,1,1,NPA
+120+ DPD,5,1,1,NPA
+Default,6,1,1,NPA
+Repossessed,7,1,1,NPA

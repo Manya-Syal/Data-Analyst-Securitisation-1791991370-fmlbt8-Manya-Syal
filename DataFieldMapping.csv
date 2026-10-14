@@ -1,0 +1,43 @@
+RequiredField,Group,SourceColumns,Status
+Loan ID,Identification,LoanID,Present
+Pool ID,Identification,PoolID,Present
+Originator ID,Identification,-,Missing (ServicerID only)
+Servicer ID,Identification,ServicerID,Present
+Account Status,Identification,DelinquencyStatus,Present
+Origination Date,Origination,OriginationDate,Present
+Original Balance,Origination,OriginalLoanAmount,Present
+Original Term,Origination,OriginalTerm,Present
+Interest Rate,Origination,InterestRate,Present
+Rate Type,Origination,-,Missing
+Origination Channel,Origination,OriginationChannel,Present
+Loan Purpose,Origination,LoanPurpose,Present
+Vehicle Make / Model / Year / Type,Collateral,"VehicleMake, VehicleModel, VehicleYear, VehicleType",Present
+New/Used Flag,Collateral,IsNewVehicle,Present
+Original / Current Vehicle Value,Collateral,"OriginalVehicleValue, CurrentVehicleValue",Present
+Mileage at Origination,Collateral,-,Missing
+Vehicle Registration State,Collateral,State (borrower state),Proxy
+CIBIL Score at Origination / Current,Borrower,"CIBIL_Score_Origination, CIBIL_Score_Current",Present
+Employment Type,Borrower,EmploymentType,Present
+Annual Income,Borrower,AnnualIncome_INR,Present
+DTI Ratio,Borrower,DTI_Ratio,Present
+Borrower Age,Borrower,BorrowerAge,Present
+Geographic Region,Borrower,"Region, State",Present
+Years at Current Employment,Borrower,-,Missing
+Reporting Date,Performance,CutoffDate,Present
+Current Balance,Performance,CurrentBalance,Present
+Scheduled Payment,Performance,ScheduledPaymentDue,Present
+Actual Payment,Performance,LastPaymentAmount,Present
+Delinquency Status / DPD,Performance,"DelinquencyStatus, DelinquencyDays",Present
+Cumulative Loss / Recovery,Performance,"LossAmount, RecoveryAmount, NetLoss",Present
+Prepayment Amount,Performance,PrepaymentAmount,Present
+Modification Flag,Performance,"IsModified, ModificationType",Present
+IFRS 9 Stage,Performance,IFRS9_Stage,Present
+RBI Priority Sector Classification,India-specific,-,Missing
+GST Registration,India-specific,-,Missing
+Aadhaar / KYC Status,India-specific,-,Missing
+NACH Mandate Status,India-specific,-,Missing
+Insurance Coverage,India-specific,"InsuranceType, HasInsurance",Present
+Hypothecation Registration,India-specific,-,Missing
+Moratorium History,India-specific,ModificationType (partial),Partial
+WAC / WAM / WALA / WA LTV / WA CIBIL,Computed in DAX,see measure dictionary,Computed
+"HHI, Top-10 concentration, stratification",Computed in DAX,see measure dictionary,Computed

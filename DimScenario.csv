@@ -1,0 +1,7 @@
+scenario_id,scenario,weight,pd_multiplier,lgd_add,cdr_multiple,cpr_change,rate_shock_bps,annual_cdr,annual_cpr,pool_lgd
+1,Base,0.5,1.0,0.0,1.0,0.0,0,0.03577,0.09238,0.4147
+2,Upside,0.1,0.8,-0.03,0.6,0.02,0,0.02146,0.11238,0.3847
+3,Moderate Stress,0.25,1.5,0.07,2.0,-0.02,0,0.07154,0.07238,0.4847
+4,Severe Stress,0.15,2.5,0.15,3.5,-0.04,100,0.12519,0.05238,0.5647
+5,Crisis (GFC-style),0.0,4.0,0.25,6.0,-0.06,200,0.21461,0.03238,0.6647
+6,Rate Shock,0.0,1.6,0.03,2.0,-0.03,300,0.07154,0.06238,0.4447

@@ -1,0 +1,5 @@
+tranche,seniority,attachment,detachment,coupon,rating,size_pct
+Class A (Senior),1,0.2,1.0,0.07,AAA,0.8
+Class B (Mezzanine),2,0.08,0.2,0.085,A,0.12000000000000001
+Class C (Junior),3,0.03,0.08,0.115,BB,0.05
+Equity / Residual,4,0.0,0.03,0.0,NR,0.03

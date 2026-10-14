@@ -1,0 +1,65 @@
+FromBucket,ToBucket,FromOrder,ToOrder,LoanMonths
+Current,Current,0,0,3985
+Current,1-29 DPD,0,1,238
+Current,30-59 DPD,0,2,30
+Current,60-89 DPD,0,3,20
+Current,90-119 DPD,0,4,0
+Current,120+ DPD,0,5,0
+Current,Default,0,6,0
+Current,Repossessed,0,7,0
+1-29 DPD,Current,1,0,219
+1-29 DPD,1-29 DPD,1,1,170
+1-29 DPD,30-59 DPD,1,2,21
+1-29 DPD,60-89 DPD,1,3,0
+1-29 DPD,90-119 DPD,1,4,0
+1-29 DPD,120+ DPD,1,5,0
+1-29 DPD,Default,1,6,0
+1-29 DPD,Repossessed,1,7,0
+30-59 DPD,Current,2,0,0
+30-59 DPD,1-29 DPD,2,1,0
+30-59 DPD,30-59 DPD,2,2,27
+30-59 DPD,60-89 DPD,2,3,32
+30-59 DPD,90-119 DPD,2,4,0
+30-59 DPD,120+ DPD,2,5,0
+30-59 DPD,Default,2,6,0
+30-59 DPD,Repossessed,2,7,0
+60-89 DPD,Current,3,0,0
+60-89 DPD,1-29 DPD,3,1,0
+60-89 DPD,30-59 DPD,3,2,0
+60-89 DPD,60-89 DPD,3,3,53
+60-89 DPD,90-119 DPD,3,4,23
+60-89 DPD,120+ DPD,3,5,8
+60-89 DPD,Default,3,6,0
+60-89 DPD,Repossessed,3,7,0
+90-119 DPD,Current,4,0,0
+90-119 DPD,1-29 DPD,4,1,0
+90-119 DPD,30-59 DPD,4,2,0
+90-119 DPD,60-89 DPD,4,3,0
+90-119 DPD,90-119 DPD,4,4,47
+90-119 DPD,120+ DPD,4,5,8
+90-119 DPD,Default,4,6,6
+90-119 DPD,Repossessed,4,7,1
+120+ DPD,Current,5,0,0
+120+ DPD,1-29 DPD,5,1,0
+120+ DPD,30-59 DPD,5,2,0
+120+ DPD,60-89 DPD,5,3,0
+120+ DPD,90-119 DPD,5,4,0
+120+ DPD,120+ DPD,5,5,13
+120+ DPD,Default,5,6,1
+120+ DPD,Repossessed,5,7,1
+Default,Current,6,0,0
+Default,1-29 DPD,6,1,0
+Default,30-59 DPD,6,2,0
+Default,60-89 DPD,6,3,0
+Default,90-119 DPD,6,4,0
+Default,120+ DPD,6,5,0
+Default,Default,6,6,9
+Default,Repossessed,6,7,0
+Repossessed,Current,7,0,0
+Repossessed,1-29 DPD,7,1,0
+Repossessed,30-59 DPD,7,2,0
+Repossessed,60-89 DPD,7,3,0
+Repossessed,90-119 DPD,7,4,0
+Repossessed,120+ DPD,7,5,0
+Repossessed,Default,7,6,0
+Repossessed,Repossessed,7,7,0

@@ -1,0 +1,20 @@
+Parameter,Value,Source
+Base annual CDR,0.03576777278840526,"dynamic_loss_monthly: NewDefaults_Balance / BOP_Balance, annualised"
+Pool net LGD (severity),0.4147195714935374,dynamic_loss_monthly: NetLoss / NewDefaults_Balance
+Pool gross LGD,0.6509044200135633,dynamic_loss_monthly: GrossLoss / NewDefaults_Balance
+Base annual CPR,0.0923786607573508,"dynamic_loss_monthly: Prepayments / BOP_Balance, annualised"
+Pool WAC,0.10945450880214168,tape: InterestRate weighted by CurrentBalance
+Pool WAM (months),45.142781292094305,tape: RemainingTerm weighted by CurrentBalance
+Pool balance,317785202.14,tape: sum CurrentBalance
+Rate shock PD elasticity (per 100bps),0.1,ASSUMPTION - PD multiplier rises 10% per 100bps shock
+Delinquency trigger (60+ DPD % of pool),0.12,ASSUMPTION - brief gives no trigger levels
+Cumulative net loss trigger,0.02,ASSUMPTION - brief gives no trigger levels
+OC ratio trigger (min),1.05,ASSUMPTION - brief gives no trigger levels
+Arena weight - Equity,10.0,ASSUMPTION - Risk Arena points lost per 100% equity write-down
+Arena weight - Junior,25.0,ASSUMPTION - points lost per 100% Class C write-down
+Arena weight - Mezzanine,35.0,ASSUMPTION - points lost per 100% Class B write-down
+Arena weight - Senior,30.0,ASSUMPTION - points lost per 100% Class A write-down
+Arena weight - Trigger breach,5.0,ASSUMPTION - points lost per trigger breached
+Arena rating - Fortress (min score),95.0,ASSUMPTION
+Arena rating - Resilient (min score),80.0,ASSUMPTION
+Arena rating - Stressed (min score),60.0,ASSUMPTION

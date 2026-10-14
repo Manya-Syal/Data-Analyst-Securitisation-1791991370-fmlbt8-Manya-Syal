@@ -1,0 +1,6 @@
+UserEmail,Role,ServicerID,Region
+portfolio.manager@example.com,PortfolioManager,ALL,ALL
+risk.analyst@example.com,RiskAnalyst,ALL,ALL
+senior.mgmt@example.com,SeniorManagement,ALL,ALL
+auditor@example.com,Auditor,ALL,North
+servicer.hdfc@example.com,Servicer,SVC001,ALL

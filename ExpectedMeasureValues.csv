@@ -1,0 +1,35 @@
+Measure,ExpectedValue_Python
+Total Outstanding Balance,317785202.14
+Original Balance,546073700.0
+Pool Factor,0.581946
+Total EAD,326164171.9
+Loan Count,500.0
+Active Loans,476.0
+Defaulted Loans,9.0
+WAC,0.109455
+WAM,45.142781
+WALA,16.755706
+WALT,61.898488
+WA LTV Current,0.675413
+WA CIBIL,742.439265
+WA DTI,0.239732
+Delinquent 30+ %,0.141141
+Delinquent 60+ %,0.105873
+Delinquent 90+ %,0.055695
+Total ECL (Tape),11662952.9
+ECL Coverage %,0.035758
+ECL Stage 1,2792098.27
+ECL Stage 2,1648395.03
+ECL Stage 3,7222459.6
+Challenger ECL (DAX),29455420.89
+Realised Recovery Rate (Tape),0.310897
+Net Loss Severity (Dynamic),0.41472
+Annualised Default Rate (All Months),0.035768
+HHI State,0.058122
+Top 5 State Concentration,0.376958
+Roll Rate Current to Current,0.9326
+Roll Rate Current to 1-29,0.055699
+Roll Rate 60-89 to 90+,0.369048
+Roll Rate 30-59 to 60-89,0.542373
+Reconciliation Break (Tape vs Dynamic),-152364302.75
+Cumulative Net Loss (Reporting),7205331.91

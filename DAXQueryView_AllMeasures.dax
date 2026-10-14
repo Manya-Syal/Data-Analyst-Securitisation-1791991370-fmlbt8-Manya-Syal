@@ -1,0 +1,767 @@
+// Paste into Power BI Desktop > DAX query view, then click 'Update model with changes'.
+// BEFORE running: (1) create the blank table _Measures, (2) create the 9 Param... tables (guide section 4, steps 4-5).
+// All measures are in ONE query because some reference measures from other days (they must be created together).
+
+DEFINE
+    // D03-01 (Pool)
+    MEASURE _Measures[Total Outstanding Balance] =
+        SUM ( FactLoanTape[CurrentBalance] )
+    // D03-02 (Pool)
+    MEASURE _Measures[Original Balance] =
+        SUM ( DimLoan[OriginalLoanAmount] )
+    // D03-03 (Pool)
+    MEASURE _Measures[Pool Factor] =
+        DIVIDE ( [Total Outstanding Balance], [Original Balance] )
+    // D03-04 (Pool)
+    MEASURE _Measures[Total EAD] =
+        SUM ( FactLoanTape[EAD] )
+    // D03-05 (Counts)
+    MEASURE _Measures[Loan Count] =
+        COUNTROWS ( FactLoanTape )
+    // D03-06 (Counts)
+    MEASURE _Measures[Active Loans] =
+        CALCULATE ( COUNTROWS ( FactLoanTape ), FactLoanTape[CurrentBalance] > 0 )
+    // D03-07 (Counts)
+    MEASURE _Measures[Defaulted Loans] =
+        CALCULATE ( COUNTROWS ( FactLoanTape ), FactLoanTape[IsDefaulted] = 1 )
+    // D03-08 (Counts)
+    MEASURE _Measures[Prepaid Loans] =
+        CALCULATE ( COUNTROWS ( FactLoanTape ), FactLoanTape[PrepaymentAmount] > 0 )
+    // D03-09 (Balances)
+    MEASURE _Measures[Defaulted Balance] =
+        CALCULATE ( [Total Outstanding Balance], FactLoanTape[IsDefaulted] = 1 )
+    // D03-10 (Delinquency)
+    MEASURE _Measures[Balance Current] =
+        CALCULATE ( [Total Outstanding Balance], FactLoanTape[DelinquencyStatus] = "Current" )
+    // D03-11 (Delinquency)
+    MEASURE _Measures[Balance 1-29 DPD] =
+        CALCULATE ( [Total Outstanding Balance], FactLoanTape[DelinquencyStatus] = "1-29 DPD" )
+    // D03-12 (Delinquency)
+    MEASURE _Measures[Balance 30 DPD] =
+        CALCULATE ( [Total Outstanding Balance], FactLoanTape[DelinquencyStatus] = "30-59 DPD" )
+    // D03-13 (Delinquency)
+    MEASURE _Measures[Balance 60 DPD] =
+        CALCULATE ( [Total Outstanding Balance], FactLoanTape[DelinquencyStatus] = "60-89 DPD" )
+    // D03-14 (Delinquency)
+    MEASURE _Measures[Balance 90 DPD] =
+        CALCULATE ( [Total Outstanding Balance], FactLoanTape[DelinquencyStatus] = "90-119 DPD" )
+    // D03-15 (Delinquency)
+    MEASURE _Measures[Balance 120+ DPD] =
+        CALCULATE ( [Total Outstanding Balance], FactLoanTape[DelinquencyStatus] IN { "120+ DPD", "Default", "Repossessed" } )
+    // D03-16 (Delinquency)
+    MEASURE _Measures[Delinquent 30+ Balance] =
+        CALCULATE ( [Total Outstanding Balance], FactLoanTape[DelinquencyDays] >= 30 )
+    // D03-17 (Delinquency)
+    MEASURE _Measures[Delinquent 30+ %] =
+        DIVIDE ( [Delinquent 30+ Balance], [Total Outstanding Balance] )
+    // D03-18 (Delinquency)
+    MEASURE _Measures[Delinquent 60+ Balance] =
+        CALCULATE ( [Total Outstanding Balance], FactLoanTape[DelinquencyDays] >= 60 )
+    // D03-19 (Delinquency)
+    MEASURE _Measures[Delinquent 60+ %] =
+        DIVIDE ( [Delinquent 60+ Balance], [Total Outstanding Balance] )
+    // D03-20 (Delinquency)
+    MEASURE _Measures[Delinquent 90+ Balance] =
+        CALCULATE ( [Total Outstanding Balance], FactLoanTape[DelinquencyDays] >= 90 )
+    // D03-21 (Delinquency)
+    MEASURE _Measures[Delinquent 90+ %] =
+        DIVIDE ( [Delinquent 90+ Balance], [Total Outstanding Balance] )
+    // D03-22 (Weighted avg)
+    MEASURE _Measures[WAC] =
+        DIVIDE ( SUMX ( FactLoanTape, RELATED ( DimLoan[InterestRate] ) * FactLoanTape[CurrentBalance] ), [Total Outstanding Balance] ) / 100
+    // D03-23 (Weighted avg)
+    MEASURE _Measures[WAM] =
+        DIVIDE ( SUMX ( FactLoanTape, FactLoanTape[RemainingTerm] * FactLoanTape[CurrentBalance] ), [Total Outstanding Balance] )
+    // D03-24 (Weighted avg)
+    MEASURE _Measures[WALA] =
+        DIVIDE ( SUMX ( FactLoanTape, FactLoanTape[MonthsOnBook] * FactLoanTape[CurrentBalance] ), [Total Outstanding Balance] )
+    // D03-25 (Weighted avg)
+    MEASURE _Measures[WALT] =
+        DIVIDE ( SUMX ( FactLoanTape, RELATED ( DimLoan[OriginalTerm] ) * FactLoanTape[CurrentBalance] ), [Total Outstanding Balance] )
+    // D03-26 (Weighted avg)
+    MEASURE _Measures[WA LTV Origination] =
+        DIVIDE ( SUMX ( FactLoanTape, FactLoanTape[LTV_AtOrigination] * FactLoanTape[CurrentBalance] ), [Total Outstanding Balance] )
+    // D03-27 (Weighted avg)
+    MEASURE _Measures[WA LTV Current] =
+        DIVIDE ( SUMX ( FactLoanTape, FactLoanTape[LTV_Current] * FactLoanTape[CurrentBalance] ), [Total Outstanding Balance] )
+    // D03-28 (Weighted avg)
+    MEASURE _Measures[WA CIBIL] =
+        DIVIDE ( SUMX ( FactLoanTape, FactLoanTape[CIBIL_Score_Current] * FactLoanTape[CurrentBalance] ), [Total Outstanding Balance] )
+    // D03-29 (Weighted avg)
+    MEASURE _Measures[WA CIBIL Origination] =
+        DIVIDE ( SUMX ( FactLoanTape, FactLoanTape[CIBIL_Score_Origination] * FactLoanTape[CurrentBalance] ), [Total Outstanding Balance] )
+    // D03-30 (Weighted avg)
+    MEASURE _Measures[WA DTI] =
+        DIVIDE ( SUMX ( FactLoanTape, FactLoanTape[DTI_Ratio] * FactLoanTape[CurrentBalance] ), [Total Outstanding Balance] )
+    // D03-31 (Pool)
+    MEASURE _Measures[Average Loan Balance] =
+        DIVIDE ( [Total Outstanding Balance], [Active Loans] )
+    // D03-32 (Pool)
+    MEASURE _Measures[Largest Loan Balance] =
+        MAX ( FactLoanTape[CurrentBalance] )
+    // D03-33 (Pool)
+    MEASURE _Measures[Insured Loan %] =
+        DIVIDE ( CALCULATE ( [Total Outstanding Balance], DimLoan[HasInsurance] = 1 ), [Total Outstanding Balance] )
+    // D03-34 (Pool)
+    MEASURE _Measures[New Vehicle %] =
+        DIVIDE ( CALCULATE ( [Total Outstanding Balance], DimVehicle[IsNewVehicle] = 1 ), [Total Outstanding Balance] )
+    // D03-35 (Pool)
+    MEASURE _Measures[Modified Loan %] =
+        DIVIDE ( CALCULATE ( COUNTROWS ( FactLoanTape ), DimLoan[IsModified] = 1 ), [Loan Count] )
+    // D03-36 (Loss)
+    MEASURE _Measures[Total Prepayments] =
+        SUM ( FactLoanTape[PrepaymentAmount] )
+    // D03-37 (Loss)
+    MEASURE _Measures[Total Loss Amount] =
+        SUM ( FactLoanTape[LossAmount] )
+    // D03-38 (Loss)
+    MEASURE _Measures[Total Recoveries] =
+        SUM ( FactLoanTape[RecoveryAmount] )
+    // D03-39 (Loss)
+    MEASURE _Measures[Total Net Loss (Tape)] =
+        SUM ( FactLoanTape[NetLoss] )
+    // D03-40 (Collections)
+    MEASURE _Measures[Payment Collection Rate] =
+        DIVIDE ( SUM ( FactLoanTape[LastPaymentAmount] ), SUM ( FactLoanTape[ScheduledPaymentDue] ) )
+    // D04-01 (Base)
+    MEASURE _Measures[Net Loss (Monthly)] =
+        CALCULATE ( SUM ( FactDynamicLoss[NetLoss_ThisMonth] ), FactDynamicLoss[IncludeInTrend] = 1 )
+    // D04-02 (Base)
+    MEASURE _Measures[Gross Loss (Monthly)] =
+        CALCULATE ( SUM ( FactDynamicLoss[GrossLoss_ThisMonth] ), FactDynamicLoss[IncludeInTrend] = 1 )
+    // D04-03 (Base)
+    MEASURE _Measures[Recoveries (Monthly)] =
+        CALCULATE ( SUM ( FactDynamicLoss[Recoveries_ThisMonth] ), FactDynamicLoss[IncludeInTrend] = 1 )
+    // D04-04 (Base)
+    MEASURE _Measures[New Defaults Balance (Monthly)] =
+        CALCULATE ( SUM ( FactDynamicLoss[NewDefaults_Balance] ), FactDynamicLoss[IncludeInTrend] = 1 )
+    // D04-05 (Base)
+    MEASURE _Measures[BOP Balance (Monthly)] =
+        CALCULATE ( SUM ( FactDynamicLoss[BOP_Balance] ), FactDynamicLoss[IncludeInTrend] = 1 )
+    // D04-06 (Base)
+    MEASURE _Measures[Monthly Default Rate] =
+        DIVIDE ( [New Defaults Balance (Monthly)], [BOP Balance (Monthly)] )
+    // D04-07 (Base)
+    MEASURE _Measures[Monthly Net Loss Rate] =
+        DIVIDE ( [Net Loss (Monthly)], [BOP Balance (Monthly)] )
+    // D04-08 (To-date)
+    MEASURE _Measures[Net Loss MTD] =
+        TOTALMTD ( [Net Loss (Monthly)], DimDate[Date] )
+    // D04-09 (To-date)
+    MEASURE _Measures[Net Loss QTD] =
+        TOTALQTD ( [Net Loss (Monthly)], DimDate[Date] )
+    // D04-10 (To-date)
+    MEASURE _Measures[Net Loss YTD] =
+        TOTALYTD ( [Net Loss (Monthly)], DimDate[Date] )
+    // D04-11 (To-date)
+    MEASURE _Measures[Net Loss FYTD] =
+        VAR fy = MAX ( DimDate[FiscalYear] )
+        VAR d  = MAX ( DimDate[Date] )
+        RETURN CALCULATE ( [Net Loss (Monthly)], FILTER ( ALL ( DimDate ), DimDate[FiscalYear] = fy && DimDate[Date] <= d ) )
+    // D04-12 (Comparison)
+    MEASURE _Measures[Net Loss Prior Month] =
+        CALCULATE ( [Net Loss (Monthly)], DATEADD ( DimDate[Date], -1, MONTH ) )
+    // D04-13 (Comparison)
+    MEASURE _Measures[Net Loss MoM %] =
+        DIVIDE ( [Net Loss (Monthly)] - [Net Loss Prior Month], [Net Loss Prior Month] )
+    // D04-14 (Comparison)
+    MEASURE _Measures[Default Rate Prior Quarter] =
+        CALCULATE ( [Monthly Default Rate], DATEADD ( DimDate[Date], -1, QUARTER ) )
+    // D04-15 (Comparison)
+    MEASURE _Measures[Default Rate QoQ Change] =
+        [Monthly Default Rate] - [Default Rate Prior Quarter]
+    // D04-16 (Comparison)
+    MEASURE _Measures[Default Rate vs Prior Year] =
+        CALCULATE ( [Monthly Default Rate], SAMEPERIODLASTYEAR ( DimDate[Date] ) )
+    // D04-17 (Rolling)
+    MEASURE _Measures[Rolling 3M Default Rate] =
+        VAR LastD = MAX ( FactDynamicLoss[MonthEnd] )
+        VAR Win = DATESINPERIOD ( DimDate[Date], LastD, -3, MONTH )
+        RETURN DIVIDE ( CALCULATE ( [New Defaults Balance (Monthly)], Win ), CALCULATE ( [BOP Balance (Monthly)], Win ) )
+    // D04-18 (Rolling)
+    MEASURE _Measures[Rolling 12M Default Rate] =
+        VAR LastD = MAX ( FactDynamicLoss[MonthEnd] )
+        VAR Win = DATESINPERIOD ( DimDate[Date], LastD, -12, MONTH )
+        RETURN DIVIDE ( CALCULATE ( [New Defaults Balance (Monthly)], Win ), CALCULATE ( [BOP Balance (Monthly)], Win ) )
+    // D04-19 (Rolling)
+    MEASURE _Measures[Rolling 3M Net Loss Rate] =
+        VAR LastD = MAX ( FactDynamicLoss[MonthEnd] )
+        VAR Win = DATESINPERIOD ( DimDate[Date], LastD, -3, MONTH )
+        RETURN DIVIDE ( CALCULATE ( [Net Loss (Monthly)], Win ), CALCULATE ( [BOP Balance (Monthly)], Win ) )
+    // D04-20 (Alerts)
+    MEASURE _Measures[Default Rate 12M Average] =
+        VAR LastD = MAX ( FactDynamicLoss[MonthEnd] )
+        VAR Months12 =
+            CALCULATETABLE ( VALUES ( DimDate[Date] ), DATESINPERIOD ( DimDate[Date], LastD, -12, MONTH ), DimDate[IsMonthEnd] = 1 )
+        RETURN AVERAGEX ( Months12, [Monthly Default Rate] )
+    // D04-21 (Alerts)
+    MEASURE _Measures[Default Rate 12M StdDev] =
+        VAR LastD = MAX ( FactDynamicLoss[MonthEnd] )
+        VAR Months12 =
+            CALCULATETABLE ( VALUES ( DimDate[Date] ), DATESINPERIOD ( DimDate[Date], LastD, -12, MONTH ), DimDate[IsMonthEnd] = 1 )
+        RETURN STDEVX.P ( Months12, [Monthly Default Rate] )
+    // D04-22 (Alerts)
+    MEASURE _Measures[Default Rate Z-Score] =
+        DIVIDE ( [Monthly Default Rate] - [Default Rate 12M Average], [Default Rate 12M StdDev] )
+    // D04-23 (Alerts)
+    MEASURE _Measures[Default Rate Trend Alert] =
+        IF ( ABS ( [Default Rate Z-Score] ) > 2, "ALERT: > 2 std dev", "Within range" )
+    // D04-24 (Alerts)
+    MEASURE _Measures[Delinquency 30+ Z-Score] =
+        VAR LastD = MAX ( FactDynamicLoss[MonthEnd] )
+        VAR Months12 =
+            CALCULATETABLE ( VALUES ( DimDate[Date] ), DATESINPERIOD ( DimDate[Date], LastD, -12, MONTH ), DimDate[IsMonthEnd] = 1 )
+        VAR Cur = [DPD 30+ % (Date View)]
+        RETURN DIVIDE ( Cur - AVERAGEX ( Months12, [DPD 30+ % (Date View)] ), STDEVX.P ( Months12, [DPD 30+ % (Date View)] ) )
+    // D05-01 (Strat)
+    MEASURE _Measures[Pool Share %] =
+        DIVIDE ( [Total Outstanding Balance], CALCULATE ( [Total Outstanding Balance], ALLSELECTED () ) )
+    // D05-02 (Strat)
+    MEASURE _Measures[LTV > 90% Share] =
+        DIVIDE ( CALCULATE ( [Total Outstanding Balance], FactLoanTape[LTV_Current] > 0.9 ), [Total Outstanding Balance] )
+    // D05-03 (Strat)
+    MEASURE _Measures[CIBIL < 650 Share] =
+        DIVIDE ( CALCULATE ( [Total Outstanding Balance], FactLoanTape[CIBIL_Score_Current] < 650 ), [Total Outstanding Balance] )
+    // D05-04 (Concentration)
+    MEASURE _Measures[Top 3 States] =
+        CONCATENATEX (
+            TOPN ( 3, VALUES ( DimGeography[State] ), [Total Outstanding Balance], DESC ),
+            DimGeography[State] & " " & FORMAT ( DIVIDE ( [Total Outstanding Balance], CALCULATE ( [Total Outstanding Balance], ALLSELECTED ( DimGeography ) ) ), "0.0%" ),
+            ", ", [Total Outstanding Balance], DESC )
+    // D05-05 (Concentration)
+    MEASURE _Measures[Top 5 State Concentration] =
+        DIVIDE ( SUMX ( TOPN ( 5, VALUES ( DimGeography[State] ), [Total Outstanding Balance], DESC ), [Total Outstanding Balance] ), [Total Outstanding Balance] )
+    // D05-06 (Concentration)
+    MEASURE _Measures[Top 10 Loan Concentration] =
+        DIVIDE ( SUMX ( TOPN ( 10, VALUES ( DimLoan[LoanID] ), [Total Outstanding Balance], DESC ), [Total Outstanding Balance] ), [Total Outstanding Balance] )
+    // D05-07 (Concentration)
+    MEASURE _Measures[Top 10 Borrower Concentration] =
+        DIVIDE ( SUMX ( TOPN ( 10, VALUES ( DimBorrower[BorrowerID] ), [Total Outstanding Balance], DESC ), [Total Outstanding Balance] ), [Total Outstanding Balance] )
+    // D05-08 (Concentration)
+    MEASURE _Measures[HHI State] =
+        VAR Tot = [Total Outstanding Balance]
+        RETURN SUMX ( VALUES ( DimGeography[State] ), POWER ( DIVIDE ( [Total Outstanding Balance], Tot ), 2 ) )
+    // D05-09 (Concentration)
+    MEASURE _Measures[HHI Servicer] =
+        VAR Tot = [Total Outstanding Balance]
+        RETURN SUMX ( VALUES ( DimLoan[ServicerName] ), POWER ( DIVIDE ( [Total Outstanding Balance], Tot ), 2 ) )
+    // D05-10 (Concentration)
+    MEASURE _Measures[HHI Vehicle Make] =
+        VAR Tot = [Total Outstanding Balance]
+        RETURN SUMX ( VALUES ( DimVehicle[VehicleMake] ), POWER ( DIVIDE ( [Total Outstanding Balance], Tot ), 2 ) )
+    // D05-11 (Concentration)
+    MEASURE _Measures[HHI Borrower] =
+        VAR Tot = [Total Outstanding Balance]
+        RETURN SUMX ( VALUES ( DimBorrower[BorrowerID] ), POWER ( DIVIDE ( [Total Outstanding Balance], Tot ), 2 ) )
+    // D05-12 (Ranking)
+    MEASURE _Measures[State Rank] =
+        RANKX ( ALLSELECTED ( DimGeography[State] ), [Total Outstanding Balance], , DESC, DENSE )
+    // D05-13 (Ranking)
+    MEASURE _Measures[Distinct States] =
+        DISTINCTCOUNT ( DimLoan[State] )
+    // D05-14 (Context transition)
+    MEASURE _Measures[Portfolio ECL (Context Transition)] =
+        SUMX (
+            FactLoanTape,
+            CALCULATE ( AVERAGE ( FactLoanTape[PD_Estimate] ) * AVERAGE ( FactLoanTape[LGD_Estimate] ) ) * FactLoanTape[EAD]
+        )
+    // D06-01 (Pool cash flow)
+    MEASURE _Measures[Ending Pool Balance] =
+        VAR p = MAX ( FactPool[period] )
+        RETURN CALCULATE ( SUM ( FactPool[ending_pool] ), FactPool[period] = p )
+    // D06-02 (Pool cash flow)
+    MEASURE _Measures[Interest Collected] =
+        SUM ( FactPool[interest_collected] )
+    // D06-03 (Pool cash flow)
+    MEASURE _Measures[Servicing Fees] =
+        SUM ( FactPool[servicing_fees] )
+    // D06-04 (Pool cash flow)
+    MEASURE _Measures[Net Loss (Projected)] =
+        SUM ( FactPool[net_loss] )
+    // D06-05 (Pool cash flow)
+    MEASURE _Measures[Excess Spread] =
+        SUM ( FactPool[excess_spread] )
+    // D06-06 (Pool cash flow)
+    MEASURE _Measures[Excess Spread % (annualised)] =
+        DIVIDE ( SUM ( FactPool[excess_spread] ), SUM ( FactPool[beginning_pool] ) ) * 12
+    // D06-07 (Pool cash flow)
+    MEASURE _Measures[Cumulative Loss % (Projected)] =
+        VAR p = MAX ( FactPool[period] )
+        RETURN CALCULATE ( MAX ( FactPool[cumulative_loss_pct] ), FactPool[period] = p )
+    // D06-08 (Pool cash flow)
+    MEASURE _Measures[OC Ratio] =
+        VAR p = MAX ( FactPool[period] )
+        RETURN CALCULATE ( MAX ( FactPool[oc_ratio] ), FactPool[period] = p )
+    // D06-09 (Tranche)
+    MEASURE _Measures[Tranche Beginning Balance] =
+        VAR p = MIN ( FactWaterfall[period] )
+        RETURN CALCULATE ( SUM ( FactWaterfall[beginning_balance] ), FactWaterfall[period] = p )
+    // D06-10 (Tranche)
+    MEASURE _Measures[Tranche Ending Balance] =
+        VAR p = MAX ( FactWaterfall[period] )
+        RETURN CALCULATE ( SUM ( FactWaterfall[ending_balance] ), FactWaterfall[period] = p )
+    // D06-11 (Tranche)
+    MEASURE _Measures[Interest Due] =
+        SUM ( FactWaterfall[interest_due] )
+    // D06-12 (Tranche)
+    MEASURE _Measures[Interest Paid] =
+        SUM ( FactWaterfall[interest_paid] )
+    // D06-13 (Tranche)
+    MEASURE _Measures[Interest Shortfall] =
+        [Interest Due] - [Interest Paid]
+    // D06-14 (Tranche)
+    MEASURE _Measures[Principal Paid] =
+        SUM ( FactWaterfall[principal_paid] )
+    // D06-15 (Tranche)
+    MEASURE _Measures[Tranche Writedown] =
+        SUM ( FactWaterfall[writedown] )
+    // D06-16 (Tranche)
+    MEASURE _Measures[Writedown % of Tranche] =
+        DIVIDE ( [Tranche Writedown], CALCULATE ( SUM ( FactWaterfall[beginning_balance] ), FactWaterfall[period] = 1 ) )
+    // D06-17 (Tranche)
+    MEASURE _Measures[Credit Enhancement %] =
+        MAX ( DimTranche[attachment] )
+    // D06-18 (Tranche)
+    MEASURE _Measures[Tranche Loss % (Attach-Detach)] =
+        VAR CumLoss = [Cumulative Loss % (Projected)]
+        VAR Attach  = MAX ( DimTranche[attachment] )
+        VAR Detach  = MAX ( DimTranche[detachment] )
+        RETURN DIVIDE ( MAX ( 0, MIN ( CumLoss, Detach ) - Attach ), Detach - Attach )
+    // D06-19 (Tranche)
+    MEASURE _Measures[Principal Available] =
+        SUM ( FactPool[scheduled_principal] ) + SUM ( FactPool[prepayments] ) + SUM ( FactPool[recoveries] ) + SUM ( FactPool[excess_spread_used_for_losses] )
+    // D06-20 (Tranche)
+    MEASURE _Measures[Principal to Class A] =
+        VAR BalA = CALCULATE ( SUM ( FactWaterfall[beginning_balance] ), DimTranche[tranche] = "Class A (Senior)" )
+        RETURN MIN ( [Principal Available], BalA )
+    // D06-21 (Tranche)
+    MEASURE _Measures[Principal to Class B] =
+        VAR BalB = CALCULATE ( SUM ( FactWaterfall[beginning_balance] ), DimTranche[tranche] = "Class B (Mezzanine)" )
+        RETURN MIN ( MAX ( [Principal Available] - [Principal to Class A], 0 ), BalB )
+    // D06-22 (Tranche)
+    MEASURE _Measures[Tranche Status] =
+        SWITCH ( TRUE (),
+            [Writedown % of Tranche] = 0, "Intact",
+            [Writedown % of Tranche] < 0.5, "Impaired",
+            "Wiped out" )
+    // D06-23 (Triggers)
+    MEASURE _Measures[Delinq Trigger Value] =
+        SELECTEDVALUE ( ParamDelinqTrigger[Value], 0.12 )
+    // D06-24 (Triggers)
+    MEASURE _Measures[CNL Trigger Value] =
+        SELECTEDVALUE ( ParamCNLTrigger[Value], 0.02 )
+    // D06-25 (Triggers)
+    MEASURE _Measures[OC Trigger Value] =
+        SELECTEDVALUE ( ParamOCTrigger[Value], 1.05 )
+    // D06-26 (Triggers)
+    MEASURE _Measures[Delinquency Trigger Status] =
+        IF ( [Delinquent 60+ %] > [Delinq Trigger Value], "BREACH", "OK" )
+    // D06-27 (Triggers)
+    MEASURE _Measures[Delinquency Trigger Headroom] =
+        [Delinq Trigger Value] - [Delinquent 60+ %]
+    // D06-28 (Triggers)
+    MEASURE _Measures[CNL Trigger Status] =
+        IF ( [Cumulative Loss % (Projected)] > [CNL Trigger Value], "BREACH", "OK" )
+    // D06-29 (Triggers)
+    MEASURE _Measures[OC Trigger Status] =
+        IF ( [OC Ratio] < [OC Trigger Value], "BREACH", "OK" )
+    // D06-30 (Triggers)
+    MEASURE _Measures[Trigger Breach Count] =
+        ( [Delinquency Trigger Status] = "BREACH" ) + ( [CNL Trigger Status] = "BREACH" ) + ( [OC Trigger Status] = "BREACH" )
+    // D06-31 (Triggers)
+    MEASURE _Measures[CNL Trigger Breach Month] =
+        VAR t = [CNL Trigger Value]
+        RETURN CALCULATE ( MIN ( DimPeriod[period] ), FILTER ( ALL ( DimPeriod[period] ), [Cumulative Loss % (Projected)] > t ) )
+    // D07-01 (Distribution)
+    MEASURE _Measures[Snapshot Loans] =
+        CALCULATE ( DISTINCTCOUNT ( FactMonthlyPerformance[LoanID] ), FactMonthlyPerformance[PreOrigination] = 0 )
+    // D07-02 (Distribution)
+    MEASURE _Measures[Snapshot Balance] =
+        CALCULATE ( SUM ( FactMonthlyPerformance[CurrentBalance] ), FactMonthlyPerformance[PreOrigination] = 0 )
+    // D07-03 (Distribution)
+    MEASURE _Measures[DPD 30+ Balance (Snapshot)] =
+        CALCULATE ( [Snapshot Balance], FactMonthlyPerformance[BucketOrder] >= 2 )
+    // D07-04 (Distribution)
+    MEASURE _Measures[DPD 30+ %] =
+        DIVIDE ( [DPD 30+ Balance (Snapshot)], [Snapshot Balance] )
+    // D07-05 (Distribution)
+    MEASURE _Measures[DPD 60+ %] =
+        DIVIDE ( CALCULATE ( [Snapshot Balance], FactMonthlyPerformance[BucketOrder] >= 3 ), [Snapshot Balance] )
+    // D07-06 (Distribution)
+    MEASURE _Measures[DPD 90+ %] =
+        DIVIDE ( CALCULATE ( [Snapshot Balance], FactMonthlyPerformance[BucketOrder] >= 4 ), [Snapshot Balance] )
+    // D07-07 (Distribution)
+    MEASURE _Measures[Bucket Balance %] =
+        DIVIDE ( [Snapshot Balance], CALCULATE ( [Snapshot Balance], ALL ( DimBucket ) ) )
+    // D07-08 (Distribution)
+    MEASURE _Measures[DPD 30+ % (Date View)] =
+        CALCULATE ( [DPD 30+ %], FactMonthlyPerformance[IncludeInTrend] = 1 )
+    // D07-09 (Roll rates)
+    MEASURE _Measures[Transition Count] =
+        CALCULATE ( COUNTROWS ( FactMonthlyPerformance ), FactMonthlyPerformance[ValidTransition] = 1 )
+    // D07-10 (Roll rates)
+    MEASURE _Measures[Roll Rate %] =
+        DIVIDE ( [Transition Count], CALCULATE ( [Transition Count], ALL ( DimBucket[DPD_Bucket] ) ) )
+    // D07-11 (Roll rates)
+    MEASURE _Measures[Worsened Transitions] =
+        CALCULATE ( [Transition Count], FILTER ( FactMonthlyPerformance, FactMonthlyPerformance[BucketOrder] > FactMonthlyPerformance[PriorBucketOrder] ) )
+    // D07-12 (Roll rates)
+    MEASURE _Measures[Cured Transitions] =
+        CALCULATE ( [Transition Count], FILTER ( FactMonthlyPerformance, FactMonthlyPerformance[BucketOrder] < FactMonthlyPerformance[PriorBucketOrder] ) )
+    // D07-13 (Roll rates)
+    MEASURE _Measures[Roll Forward Rate] =
+        DIVIDE ( [Worsened Transitions], [Transition Count] )
+    // D07-14 (Roll rates)
+    MEASURE _Measures[Cure Rate] =
+        DIVIDE ( [Cured Transitions], [Transition Count] )
+    // D07-15 (Roll rates)
+    MEASURE _Measures[Cure Rate (30+ DPD)] =
+        DIVIDE ( CALCULATE ( [Cured Transitions], FactMonthlyPerformance[PriorBucketOrder] >= 2 ), CALCULATE ( [Transition Count], FactMonthlyPerformance[PriorBucketOrder] >= 2 ) )
+    // D07-16 (Roll rates)
+    MEASURE _Measures[Roll Rate Current to Current] =
+        DIVIDE ( CALCULATE ( [Transition Count], FactMonthlyPerformance[PriorBucketSeq] = "Current", FactMonthlyPerformance[DPD_Bucket] = "Current" ), CALCULATE ( [Transition Count], FactMonthlyPerformance[PriorBucketSeq] = "Current" ) )
+    // D07-17 (Roll rates)
+    MEASURE _Measures[Roll Rate Current to 1-29] =
+        DIVIDE ( CALCULATE ( [Transition Count], FactMonthlyPerformance[PriorBucketSeq] = "Current", FactMonthlyPerformance[DPD_Bucket] = "1-29 DPD" ), CALCULATE ( [Transition Count], FactMonthlyPerformance[PriorBucketSeq] = "Current" ) )
+    // D07-18 (Roll rates)
+    MEASURE _Measures[Roll Rate 30-59 to 60-89] =
+        DIVIDE ( CALCULATE ( [Transition Count], FactMonthlyPerformance[PriorBucketSeq] = "30-59 DPD", FactMonthlyPerformance[DPD_Bucket] = "60-89 DPD" ), CALCULATE ( [Transition Count], FactMonthlyPerformance[PriorBucketSeq] = "30-59 DPD" ) )
+    // D07-19 (Roll rates)
+    MEASURE _Measures[Roll Rate 60-89 to 90+] =
+        DIVIDE ( CALCULATE ( [Transition Count], FactMonthlyPerformance[PriorBucketSeq] = "60-89 DPD", FactMonthlyPerformance[BucketOrder] >= 4 ), CALCULATE ( [Transition Count], FactMonthlyPerformance[PriorBucketSeq] = "60-89 DPD" ) )
+    // D07-20 (Ageing)
+    MEASURE _Measures[Balance Delinquent 1-2 Months] =
+        CALCULATE ( [Snapshot Balance], FactMonthlyPerformance[ConsecutiveMonthsDelinquent] >= 1, FactMonthlyPerformance[ConsecutiveMonthsDelinquent] <= 2 )
+    // D07-21 (Ageing)
+    MEASURE _Measures[Balance Delinquent 3-5 Months] =
+        CALCULATE ( [Snapshot Balance], FactMonthlyPerformance[ConsecutiveMonthsDelinquent] >= 3, FactMonthlyPerformance[ConsecutiveMonthsDelinquent] <= 5 )
+    // D07-22 (Ageing)
+    MEASURE _Measures[Balance Delinquent 6+ Months] =
+        CALCULATE ( [Snapshot Balance], FactMonthlyPerformance[ConsecutiveMonthsDelinquent] >= 6 )
+    // D07-23 (Ageing)
+    MEASURE _Measures[Avg Months Delinquent] =
+        CALCULATE ( AVERAGE ( FactMonthlyPerformance[ConsecutiveMonthsDelinquent] ), FactMonthlyPerformance[ConsecutiveMonthsDelinquent] > 0, FactMonthlyPerformance[PreOrigination] = 0 )
+    // D07-24 (Ageing)
+    MEASURE _Measures[Loans Delinquent 3+ Months (Latest)] =
+        VAR s = MAX ( FactMonthlyPerformance[SnapshotSeq] )
+        RETURN CALCULATE ( DISTINCTCOUNT ( FactMonthlyPerformance[LoanID] ), FactMonthlyPerformance[SnapshotSeq] = s, FactMonthlyPerformance[ConsecutiveMonthsDelinquent] >= 3 )
+    // D08-01 (Vintage)
+    MEASURE _Measures[Vintage Original Balance] =
+        CALCULATE ( SUM ( FactStaticPool[OriginalPoolBalance] ), FactStaticPool[MonthsOnBook] = 0 )
+    // D08-02 (Vintage)
+    MEASURE _Measures[CNL Rate @ MOB] =
+        DIVIDE ( SUM ( FactStaticPool[CumulativeNetLoss] ), SUM ( FactStaticPool[OriginalPoolBalance] ) )
+    // D08-03 (Vintage)
+    MEASURE _Measures[Cumulative Default Rate @ MOB] =
+        DIVIDE ( SUM ( FactStaticPool[CumulativeDefaults_Balance] ), SUM ( FactStaticPool[OriginalPoolBalance] ) )
+    // D08-04 (Vintage)
+    MEASURE _Measures[Cumulative Gross Loss Rate @ MOB] =
+        DIVIDE ( SUM ( FactStaticPool[CumulativeGrossLoss] ), SUM ( FactStaticPool[OriginalPoolBalance] ) )
+    // D08-05 (Vintage)
+    MEASURE _Measures[Cumulative Prepayment Rate @ MOB] =
+        DIVIDE ( SUM ( FactStaticPool[CumulativePrepayments] ), SUM ( FactStaticPool[OriginalPoolBalance] ) )
+    // D08-06 (Vintage)
+    MEASURE _Measures[Pool Factor @ MOB] =
+        DIVIDE ( SUM ( FactStaticPool[RemainingPoolBalance] ), SUM ( FactStaticPool[OriginalPoolBalance] ) )
+    // D08-07 (Vintage)
+    MEASURE _Measures[Latest MOB] =
+        MAX ( FactStaticPool[MonthsOnBook] )
+    // D08-08 (Vintage)
+    MEASURE _Measures[CNL Rate (Latest MOB)] =
+        DIVIDE (
+            SUMX ( VALUES ( FactStaticPool[VintageID] ),
+                VAR m = CALCULATE ( MAX ( FactStaticPool[MonthsOnBook] ) )
+                RETURN CALCULATE ( SUM ( FactStaticPool[CumulativeNetLoss] ), FactStaticPool[MonthsOnBook] = m ) ),
+            [Vintage Original Balance] )
+    // D08-09 (Vintage)
+    MEASURE _Measures[Loss Timing % (of CNL to date)] =
+        DIVIDE ( [CNL Rate @ MOB], [CNL Rate (Latest MOB)] )
+    // D08-10 (Vintage)
+    MEASURE _Measures[Marginal Loss Rate (Wtd)] =
+        DIVIDE ( SUMX ( FactStaticPool, FactStaticPool[MarginalLossRate] * FactStaticPool[RemainingPoolBalance] ), SUM ( FactStaticPool[RemainingPoolBalance] ) )
+    // D08-11 (Vintage)
+    MEASURE _Measures[Vintage 30+ Delinquency (Wtd)] =
+        DIVIDE ( SUMX ( FactStaticPool, FactStaticPool[CurrentDelinq30Plus] * FactStaticPool[RemainingPoolBalance] ), SUM ( FactStaticPool[RemainingPoolBalance] ) )
+    // D08-12 (Vintage)
+    MEASURE _Measures[Projected Ultimate CNL (MOB 36)] =
+        VAR MaxMOB  = MAX ( FactStaticPool[MonthsOnBook] )
+        VAR Cur     = CALCULATE ( [CNL Rate @ MOB], FactStaticPool[MonthsOnBook] = MaxMOB )
+        VAR RefNow  = CALCULATE ( [CNL Rate @ MOB], FactStaticPool[MonthsOnBook] = MaxMOB, FILTER ( ALL ( FactStaticPool[VintageID] ), FactStaticPool[VintageID] IN { "2021-Q1", "2021-Q2", "2021-Q3", "2021-Q4" } ) )
+        VAR Ref36   = CALCULATE ( [CNL Rate @ MOB], FactStaticPool[MonthsOnBook] = 36, FILTER ( ALL ( FactStaticPool[VintageID] ), FactStaticPool[VintageID] IN { "2021-Q1", "2021-Q2", "2021-Q3", "2021-Q4" } ) )
+        RETURN IF ( MaxMOB >= 36, Cur, DIVIDE ( Cur * Ref36, RefNow ) )
+    // D08-13 (Vintage)
+    MEASURE _Measures[Vintage WAC] =
+        [WAC]
+    // D08-14 (Vintage)
+    MEASURE _Measures[Vintage WALA] =
+        [WALA]
+    // D09-01 (ECL (tape))
+    MEASURE _Measures[Total ECL (Tape)] =
+        SUM ( FactLoanTape[ECL_Provision] )
+    // D09-02 (ECL (tape))
+    MEASURE _Measures[ECL Coverage %] =
+        DIVIDE ( [Total ECL (Tape)], [Total EAD] )
+    // D09-03 (ECL (tape))
+    MEASURE _Measures[ECL Stage 1] =
+        CALCULATE ( [Total ECL (Tape)], FactLoanTape[IFRS9_Stage] = 1 )
+    // D09-04 (ECL (tape))
+    MEASURE _Measures[ECL Stage 2] =
+        CALCULATE ( [Total ECL (Tape)], FactLoanTape[IFRS9_Stage] = 2 )
+    // D09-05 (ECL (tape))
+    MEASURE _Measures[ECL Stage 3] =
+        CALCULATE ( [Total ECL (Tape)], FactLoanTape[IFRS9_Stage] = 3 )
+    // D09-06 (ECL (tape))
+    MEASURE _Measures[EAD Stage 1] =
+        CALCULATE ( [Total EAD], FactLoanTape[IFRS9_Stage] = 1 )
+    // D09-07 (ECL (tape))
+    MEASURE _Measures[EAD Stage 2] =
+        CALCULATE ( [Total EAD], FactLoanTape[IFRS9_Stage] = 2 )
+    // D09-08 (ECL (tape))
+    MEASURE _Measures[EAD Stage 3] =
+        CALCULATE ( [Total EAD], FactLoanTape[IFRS9_Stage] = 3 )
+    // D09-09 (ECL (tape))
+    MEASURE _Measures[Stage Mix % (EAD)] =
+        DIVIDE ( [Total EAD], CALCULATE ( [Total EAD], ALL ( DimStage ) ) )
+    // D09-10 (ECL (tape))
+    MEASURE _Measures[Avg PD (EAD-weighted)] =
+        DIVIDE ( SUMX ( FactLoanTape, FactLoanTape[PD_Estimate] * FactLoanTape[EAD] ), [Total EAD] )
+    // D09-11 (ECL (tape))
+    MEASURE _Measures[Avg LGD (EAD-weighted)] =
+        DIVIDE ( SUMX ( FactLoanTape, FactLoanTape[LGD_Estimate] * FactLoanTape[EAD] ), [Total EAD] )
+    // D09-12 (ECL (tape))
+    MEASURE _Measures[ECL Recomputed (PD x LGD x EAD)] =
+        SUMX ( FactLoanTape, FactLoanTape[PD_Estimate] * FactLoanTape[LGD_Estimate] * FactLoanTape[EAD] )
+    // D09-13 (ECL (tape))
+    MEASURE _Measures[ECL Recompute Variance] =
+        [ECL Recomputed (PD x LGD x EAD)] - [Total ECL (Tape)]
+    // D09-14 (LGD)
+    MEASURE _Measures[Realised Recovery Rate (Tape)] =
+        DIVIDE ( SUM ( FactLoanTape[RecoveryAmount] ), SUM ( FactLoanTape[LossAmount] ) )
+    // D09-15 (LGD)
+    MEASURE _Measures[Net Loss Severity (Dynamic)] =
+        DIVIDE ( SUM ( FactDynamicLoss[NetLoss_ThisMonth] ), SUM ( FactDynamicLoss[NewDefaults_Balance] ) )
+    // D09-16 (LGD)
+    MEASURE _Measures[Gross Loss Severity (Dynamic)] =
+        DIVIDE ( SUM ( FactDynamicLoss[GrossLoss_ThisMonth] ), SUM ( FactDynamicLoss[NewDefaults_Balance] ) )
+    // D09-17 (PD)
+    MEASURE _Measures[PD Term Structure] =
+        MAX ( FactPDTermStructure[CumulativePD] )
+    // D09-18 (PD)
+    MEASURE _Measures[12M PD from Transition Matrix] =
+        CALCULATE ( MAX ( FactPDTermStructure[CumulativePD] ), FactPDTermStructure[HorizonMonths] = 12 )
+    // D09-19 (PD)
+    MEASURE _Measures[Param Pool LGD] =
+        CALCULATE ( MAX ( DimParameters[Value] ), DimParameters[Parameter] = "Pool net LGD (severity)" )
+    // D09-20 (PD)
+    MEASURE _Measures[Param Base CPR] =
+        CALCULATE ( MAX ( DimParameters[Value] ), DimParameters[Parameter] = "Base annual CPR" )
+    // D09-21 (PD)
+    MEASURE _Measures[Param Rate Elasticity] =
+        CALCULATE ( MAX ( DimParameters[Value] ), DimParameters[Parameter] = "Rate shock PD elasticity (per 100bps)" )
+    // D09-22 (Challenger)
+    MEASURE _Measures[Challenger ECL (DAX)] =
+        VAR LGDp = [Param Pool LGD]
+        RETURN
+        SUMX (
+            FactLoanTape,
+            VAR stg = FactLoanTape[IFRS9_Stage]
+            VAR h   = IF ( stg = 1, 12, MIN ( MAX ( FactLoanTape[RemainingTerm], 1 ), 60 ) )
+            VAR pdv = IF ( stg = 3, 1,
+                        LOOKUPVALUE ( FactPDTermStructure[CumulativePD],
+                                      FactPDTermStructure[DPD_Bucket], FactLoanTape[DelinquencyStatus],
+                                      FactPDTermStructure[HorizonMonths], h ) )
+            VAR hh  = IF ( stg = 3, 6, h )
+            VAR dfc = POWER ( 1 + RELATED ( DimLoan[InterestRate] ) / 100, - ( hh / 12 ) / 2 )
+            RETURN IF ( FactLoanTape[EAD] <= 0, 0, pdv * LGDp * FactLoanTape[EAD] * dfc )
+        )
+    // D09-23 (Challenger)
+    MEASURE _Measures[Challenger vs Tape Variance %] =
+        DIVIDE ( [Challenger ECL (DAX)] - [Total ECL (Tape)], [Total ECL (Tape)] )
+    // D09-24 (Staging)
+    MEASURE _Measures[Stage 2 DPD Value] =
+        SELECTEDVALUE ( ParamStage2DPD[Value], 30 )
+    // D09-25 (Staging)
+    MEASURE _Measures[Stage 3 DPD Value] =
+        SELECTEDVALUE ( ParamStage3DPD[Value], 90 )
+    // D09-26 (Staging)
+    MEASURE _Measures[ECL (Alt Staging)] =
+        VAR S2  = [Stage 2 DPD Value]
+        VAR S3  = [Stage 3 DPD Value]
+        VAR pd1 = CALCULATE ( DIVIDE ( SUMX ( FactLoanTape, FactLoanTape[PD_Estimate] * FactLoanTape[EAD] ), SUM ( FactLoanTape[EAD] ) ), REMOVEFILTERS (), FactLoanTape[IFRS9_Stage] = 1 )
+        VAR pd2 = CALCULATE ( DIVIDE ( SUMX ( FactLoanTape, FactLoanTape[PD_Estimate] * FactLoanTape[EAD] ), SUM ( FactLoanTape[EAD] ) ), REMOVEFILTERS (), FactLoanTape[IFRS9_Stage] = 2 )
+        VAR pd3 = CALCULATE ( DIVIDE ( SUMX ( FactLoanTape, FactLoanTape[PD_Estimate] * FactLoanTape[EAD] ), SUM ( FactLoanTape[EAD] ) ), REMOVEFILTERS (), FactLoanTape[IFRS9_Stage] = 3 )
+        RETURN
+        SUMX ( FactLoanTape,
+            VAR s = IF ( FactLoanTape[IsDefaulted] = 1 || FactLoanTape[DelinquencyDays] >= S3, 3, IF ( FactLoanTape[DelinquencyDays] >= S2, 2, 1 ) )
+            RETURN SWITCH ( s, 1, pd1, 2, pd2, pd3 ) * FactLoanTape[LGD_Estimate] * FactLoanTape[EAD] )
+    // D10-01 (What-if)
+    MEASURE _Measures[Default Rate Multiplier Value] =
+        SELECTEDVALUE ( ParamDefaultMult[Value], 1 )
+    // D10-02 (What-if)
+    MEASURE _Measures[Recovery Haircut Value] =
+        SELECTEDVALUE ( ParamRecoveryHaircut[Value], 0 )
+    // D10-03 (What-if)
+    MEASURE _Measures[CPR Change Value] =
+        SELECTEDVALUE ( ParamCPRChange[Value], 0 )
+    // D10-04 (What-if)
+    MEASURE _Measures[Rate Shock Value] =
+        SELECTEDVALUE ( ParamRateShock[Value], 0 )
+    // D10-05 (What-if)
+    MEASURE _Measures[Effective PD Multiplier] =
+        [Default Rate Multiplier Value] * ( 1 + [Param Rate Elasticity] * [Rate Shock Value] / 100 )
+    // D10-06 (What-if)
+    MEASURE _Measures[Stress ECL (What-If)] =
+        VAR PDM = [Effective PD Multiplier]
+        VAR Hc  = [Recovery Haircut Value]
+        VAR cpr0 = [Param Base CPR]
+        VAR RunOff = POWER ( DIVIDE ( 1 - ( cpr0 + [CPR Change Value] ), 1 - cpr0 ), 0.5 )
+        RETURN
+        SUMX ( FactLoanTape, MIN ( 1, FactLoanTape[PD_Estimate] * PDM ) * MIN ( 1, FactLoanTape[LGD_Estimate] + Hc ) * FactLoanTape[EAD] * RunOff )
+    // D10-07 (What-if)
+    MEASURE _Measures[Stress ECL Uplift] =
+        [Stress ECL (What-If)] - [Total ECL (Tape)]
+    // D10-08 (What-if)
+    MEASURE _Measures[Stress ECL Uplift %] =
+        DIVIDE ( [Stress ECL Uplift], [Total ECL (Tape)] )
+    // D10-09 (What-if)
+    MEASURE _Measures[Stress Coverage %] =
+        DIVIDE ( [Stress ECL (What-If)], [Total EAD] )
+    // D10-10 (Scenarios)
+    MEASURE _Measures[Scenario ECL] =
+        VAR PDM = SELECTEDVALUE ( DimScenario[pd_multiplier], 1 )
+        VAR Hc  = SELECTEDVALUE ( DimScenario[lgd_add], 0 )
+        RETURN SUMX ( FactLoanTape, MIN ( 1, FactLoanTape[PD_Estimate] * PDM ) * MIN ( 1, FactLoanTape[LGD_Estimate] + Hc ) * FactLoanTape[EAD] )
+    // D10-11 (Scenarios)
+    MEASURE _Measures[Probability-Weighted Scenario ECL] =
+        SUMX ( ALL ( DimScenario ), DimScenario[weight] * [Scenario ECL] )
+    // D10-12 (Scenarios)
+    MEASURE _Measures[Weighted ECL vs Tape] =
+        [Probability-Weighted Scenario ECL] - [Total ECL (Tape)]
+    // D10-13 (Scenarios)
+    MEASURE _Measures[Cum Loss % at Horizon] =
+        VAR p = CALCULATE ( MAX ( FactPool[period] ), ALL ( FactPool ) )
+        RETURN CALCULATE ( MAX ( FactPool[cumulative_loss_pct] ), FactPool[period] = p )
+    // D10-14 (Scenarios)
+    MEASURE _Measures[Senior Tranche Loss] =
+        CALCULATE ( [Tranche Writedown], DimTranche[tranche] = "Class A (Senior)" )
+    // D10-15 (Scenarios)
+    MEASURE _Measures[Mezzanine Tranche Loss] =
+        CALCULATE ( [Tranche Writedown], DimTranche[tranche] = "Class B (Mezzanine)" )
+    // D10-16 (Scenarios)
+    MEASURE _Measures[Junior Tranche Loss %] =
+        CALCULATE ( [Writedown % of Tranche], DimTranche[tranche] = "Class C (Junior)" )
+    // D10-17 (Scenarios)
+    MEASURE _Measures[Equity Loss %] =
+        CALCULATE ( [Writedown % of Tranche], DimTranche[tranche] = "Equity / Residual" )
+    // D10-18 (Scenarios)
+    MEASURE _Measures[Minimum OC Ratio] =
+        CALCULATE ( MIN ( FactPool[oc_ratio] ) )
+    // D10-19 (Scenarios)
+    MEASURE _Measures[CNL Trigger Headroom] =
+        [CNL Trigger Value] - [Cum Loss % at Horizon]
+    // D10-20 (Scenarios)
+    MEASURE _Measures[OC Trigger Headroom] =
+        [Minimum OC Ratio] - [OC Trigger Value]
+    // D10-21 (Arena)
+    MEASURE _Measures[Arena W Equity] =
+        CALCULATE ( MAX ( DimParameters[Value] ), DimParameters[Parameter] = "Arena weight - Equity" )
+    // D10-22 (Arena)
+    MEASURE _Measures[Arena W Junior] =
+        CALCULATE ( MAX ( DimParameters[Value] ), DimParameters[Parameter] = "Arena weight - Junior" )
+    // D10-23 (Arena)
+    MEASURE _Measures[Arena W Mezzanine] =
+        CALCULATE ( MAX ( DimParameters[Value] ), DimParameters[Parameter] = "Arena weight - Mezzanine" )
+    // D10-24 (Arena)
+    MEASURE _Measures[Arena W Senior] =
+        CALCULATE ( MAX ( DimParameters[Value] ), DimParameters[Parameter] = "Arena weight - Senior" )
+    // D10-25 (Arena)
+    MEASURE _Measures[Arena W Trigger breach] =
+        CALCULATE ( MAX ( DimParameters[Value] ), DimParameters[Parameter] = "Arena weight - Trigger breach" )
+    // D10-26 (Arena)
+    MEASURE _Measures[Arena Min Fortress] =
+        CALCULATE ( MAX ( DimParameters[Value] ), DimParameters[Parameter] = "Arena rating - Fortress (min score)" )
+    // D10-27 (Arena)
+    MEASURE _Measures[Arena Min Resilient] =
+        CALCULATE ( MAX ( DimParameters[Value] ), DimParameters[Parameter] = "Arena rating - Resilient (min score)" )
+    // D10-28 (Arena)
+    MEASURE _Measures[Arena Min Stressed] =
+        CALCULATE ( MAX ( DimParameters[Value] ), DimParameters[Parameter] = "Arena rating - Stressed (min score)" )
+    // D10-29 (Arena)
+    MEASURE _Measures[Mezzanine Loss %] =
+        CALCULATE ( [Writedown % of Tranche], DimTranche[tranche] = "Class B (Mezzanine)" )
+    // D10-30 (Arena)
+    MEASURE _Measures[Senior Loss %] =
+        CALCULATE ( [Writedown % of Tranche], DimTranche[tranche] = "Class A (Senior)" )
+    // D10-31 (Arena)
+    MEASURE _Measures[Arena Score] =
+        MAX ( 0, ROUND ( 100
+            - [Arena W Equity]         * [Equity Loss %]
+            - [Arena W Junior]         * [Junior Tranche Loss %]
+            - [Arena W Mezzanine]      * [Mezzanine Loss %]
+            - [Arena W Senior]         * [Senior Loss %]
+            - [Arena W Trigger breach] * [Trigger Breach Count], 0 ) )
+    // D10-32 (Arena)
+    MEASURE _Measures[Arena Rating] =
+        SWITCH ( TRUE (),
+            [Arena Score] >= [Arena Min Fortress],  "Fortress",
+            [Arena Score] >= [Arena Min Resilient], "Resilient",
+            [Arena Score] >= [Arena Min Stressed],  "Stressed",
+            "Crisis" )
+    // D10-33 (Arena)
+    MEASURE _Measures[Arena Message] =
+        "Scenario: " & SELECTEDVALUE ( DimScenario[scenario], "All" )
+            & " | Cum. loss " & FORMAT ( [Cum Loss % at Horizon], "0.0%" )
+            & " | Score " & [Arena Score] & " - " & [Arena Rating]
+    // D11-01 (Loss & recovery)
+    MEASURE _Measures[Cumulative Net Loss (Reporting)] =
+        VAR LastD = MAX ( FactDynamicLoss[MonthEnd] )
+        RETURN CALCULATE ( [Net Loss (Monthly)], FILTER ( ALL ( DimDate[Date] ), DimDate[Date] <= LastD ) )
+    // D11-02 (Loss & recovery)
+    MEASURE _Measures[Cumulative Net Loss % of Original] =
+        DIVIDE ( [Cumulative Net Loss (Reporting)], CALCULATE ( [Original Balance], REMOVEFILTERS () ) )
+    // D11-03 (Loss & recovery)
+    MEASURE _Measures[Annualised Default Rate (All Months)] =
+        1 - POWER ( 1 - DIVIDE ( SUM ( FactDynamicLoss[NewDefaults_Balance] ), SUM ( FactDynamicLoss[BOP_Balance] ) ), 12 )
+    // D11-04 (Prepayment)
+    MEASURE _Measures[SMM] =
+        DIVIDE ( SUM ( FactDynamicLoss[Prepayments_ThisMonth] ), SUM ( FactDynamicLoss[BOP_Balance] ) )
+    // D11-05 (Prepayment)
+    MEASURE _Measures[CPR (Annualised)] =
+        1 - POWER ( 1 - [SMM], 12 )
+    // D11-06 (Collections)
+    MEASURE _Measures[Collection Efficiency] =
+        DIVIDE ( SUM ( FactDynamicLoss[CollectionsTotal] ), SUM ( FactDynamicLoss[BillingAmount] ) )
+    // D11-07 (Collections)
+    MEASURE _Measures[Excess Spread (Reported)] =
+        SUM ( FactDynamicLoss[ExcessSpread_Monthly] )
+    // D11-08 (Collections)
+    MEASURE _Measures[Excess Spread % (Reported, annualised)] =
+        DIVIDE ( SUM ( FactDynamicLoss[ExcessSpread_Monthly] ), SUM ( FactDynamicLoss[BOP_Balance] ) ) * 12
+    // D11-09 (Report header)
+    MEASURE _Measures[Report Month Label] =
+        FORMAT ( MAX ( FactDynamicLoss[MonthEnd] ), "mmm yyyy" )
+    // D11-10 (Data tape)
+    MEASURE _Measures[Data Tape Field Completeness %] =
+        DIVIDE ( COUNTROWS ( FILTER ( DataFieldMapping, DataFieldMapping[Status] IN { "Present", "Computed" } ) ), COUNTROWS ( DataFieldMapping ) )
+    // D12-01 (Security)
+    MEASURE _Measures[Current User] =
+        USERPRINCIPALNAME ()
+    // D12-02 (Security)
+    MEASURE _Measures[Current User Role] =
+        LOOKUPVALUE ( DimSecurity[Role], DimSecurity[UserEmail], USERPRINCIPALNAME (), "Unmapped" )
+    // D12-03 (Security)
+    MEASURE _Measures[Loans Visible to User] =
+        [Loan Count]
+    // D12-04 (Validation)
+    MEASURE _Measures[Reconciliation Break (Tape vs Dynamic)] =
+        VAR LastSeq = CALCULATE ( MAX ( FactDynamicLoss[ReportingSeq] ), REMOVEFILTERS () )
+        RETURN CALCULATE ( [Total Outstanding Balance], REMOVEFILTERS () )
+             - CALCULATE ( SUM ( FactDynamicLoss[EOP_Balance] ), REMOVEFILTERS (), FactDynamicLoss[ReportingSeq] = LastSeq )
+    // D12-05 (Validation)
+    MEASURE _Measures[High-Severity Data Issues] =
+        CALCULATE ( COUNTROWS ( DataQualityLog ), DataQualityLog[severity] = "High" )
+    // D12-06 (Validation)
+    MEASURE _Measures[ECL Check Flag] =
+        IF ( ABS ( [ECL Recompute Variance] ) < 1, "PASS", "FAIL" )
+
+EVALUATE ROW ( "Measures defined", 222 )

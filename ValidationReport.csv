@@ -1,0 +1,20 @@
+check,result,detail
+Loan IDs unique,PASS,
+Tape ECL_Provision = PD x LGD x EAD (all loans),PASS,
+"Tape stage consistent with DPD status (S1 <30 DPD, S2 30-89, S3 90+/default)",PASS,
+Every DPD LoanID exists in tape,PASS,
+Latest DPD snapshot bucket = tape DelinquencyStatus,PASS,
+Static pool vintages = tape vintages (IDs),PASS,
+Static pool loan counts = tape loans per vintage,PASS,
+Static pool original balance = tape original amount,PASS,"546,073,700"
+Static pool CNL never decreases with months on book,PASS,
+Dynamic loss: Net = Gross - Recoveries,PASS,
+Dynamic loss: BOP - defaults - prepay - amort = EOP,PASS,
+Transition matrix rows sum to 1,PASS,
+PD term structure monotone non-decreasing,PASS,
+Weights sum to 1,PASS,
+Waterfall: initial notes = pool balance,PASS,
+Waterfall: notes = pool at month 36 (cash conservation),PASS,
+Waterfall: no negative tranche balances,PASS,
+Tape ECL vs challenger (transition-matrix PD) ECL,INFO,"tape 11,662,953 vs challenger 29,455,421 (+152.6%)"
+Calibration (dynamic loss),INFO,"CDR 3.58%, net LGD 41.5%, CPR 9.2%"
